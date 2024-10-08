@@ -1,3 +1,13 @@
+import sys
+import os
+# Add the specified directory to sys.path
+path_to_add_1 = r"C:\Users\milos\Desktop\ROB_Delft\Courses\Year_2\HIPPO_Internship\Active_Codes_HIPPO\hydrowizard"
+path_to_add_2 = r"C:\Users\milos\Desktop\ROB_Delft\Courses\Year_2\HIPPO_Internship\Active_Codes_HIPPO\hydrowizard\examples\basins\lower-omo"
+sys.path.append(path_to_add_1)
+sys.path.append(path_to_add_2)
+import sys
+sys.path.append(r'C:\Users\milos\Anaconda3\envs\Hydrowizard_env\Lib\site-packages')
+# print(sys.path)
 import argparse
 from tqdm import tqdm
 from pymoo.algorithms.moo.nsga3 import NSGA3

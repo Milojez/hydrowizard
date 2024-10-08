@@ -1,0 +1,184 @@
+basin:
+  cyclostationarity_interval: month
+  integration_interval: 12
+  name: Lower Omo
+  optimization_method: MOEA RBF
+  simulation_horizon: 12
+  simulation_start_time: 2029-01-01 00:00
+biased_initial_population: false
+flows:
+- flow_rate:
+  - 53.61
+  - 47.81
+  - 40.7
+  - 58.8
+  - 88.19
+  - 191.98
+  - 582.05
+  - 942.25
+  - 592.34
+  - 316.45
+  - 138.75
+  - 69.97
+  kind: x
+  name: Flow A
+  source_node: null
+  target_node: Gibe-III
+- flow_rate:
+  - 21.44
+  - 19.12
+  - 16.28
+  - 23.52
+  - 35.28
+  - 76.79
+  - 232.82
+  - 376.9
+  - 236.94
+  - 126.58
+  - 55.5
+  - 27.99
+  kind: x
+  name: Flow B
+  source_node: null
+  target_node: Koysha
+- flow_rate:
+  - 15.01
+  - 13.39
+  - 11.4
+  - 16.46
+  - 24.69
+  - 53.75
+  - 162.97
+  - 263.83
+  - 165.86
+  - 88.61
+  - 38.85
+  - 19.59
+  kind: x
+  name: Flow C
+  source_node: null
+  target_node: Omorate
+- kind: l
+  name: Gibe-III Release
+  source_node: Gibe-III
+  target_node: Koysha
+- kind: l
+  name: Koysha Release
+  source_node: Koysha
+  target_node: Kuraz Headworks
+- demand_flow: true
+  demand_rate:
+  - 98.77
+  - 56.58
+  - 15.43
+  - 0.0
+  - 17.49
+  - 17.49
+  - 29.84
+  - 54.53
+  - 48.35
+  - 75.62
+  - 105.45
+  - 104.42
+  kind: l
+  name: Canals to Kuraz Sugar Plantations
+  source_node: Kuraz Headworks
+  target_node: null
+- evaporation_flow: true
+  kind: r
+  name: Gibe-III Evaporation
+  source_node: Gibe-III
+  target_node: null
+- evaporation_flow: true
+  kind: r
+  name: Koysha Evaporation
+  source_node: Koysha
+  target_node: null
+- kind: r
+  name: Main Channel
+  source_node: Kuraz Headworks
+  target_node: Omorate
+- demand_flow: true
+  demand_rate:
+  - 29.72
+  - 26.5
+  - 22.56
+  - 32.59
+  - 48.89
+  - 106.43
+  - 322.68
+  - 522.68
+  - 328.39
+  - 175.44
+  - 76.92
+  - 38.79
+  kind: r
+  name: Outflow to Lake Turkana
+  source_node: Omorate
+  target_node: null
+nodes:
+- bathymetry: Bathymetry Gibe-III.csv
+  evaporation_rate:
+  - 30.32
+  - 31.04
+  - 56.73
+  - 93.36
+  - 103.59
+  - 89.21
+  - 74.13
+  - 78.86
+  - 73.49
+  - 87.72
+  - 63.18
+  - 43.01
+  initial_volume: 11750000000.0
+  max_volume: 11750000000.0
+  min_volume: 7000000000.0
+  name: Gibe-III
+  power_generation_node: true
+  reservoir_node: true
+  turbine_efficiency: 0.9
+  turbine_head: 9.0
+  turbine_max_flow_rate: 1064.0
+  turbine_max_power: 1870.0
+- bathymetry: Bathymetry Koysha.csv
+  evaporation_rate:
+  - 30.32
+  - 31.04
+  - 56.73
+  - 93.36
+  - 103.59
+  - 89.21
+  - 74.13
+  - 78.86
+  - 73.49
+  - 87.72
+  - 63.18
+  - 43.01
+  initial_volume: 0.0
+  max_volume: 6000000000.0
+  min_volume: 3000000000.0
+  name: Koysha
+  power_generation_node: true
+  reservoir_node: true
+  turbine_efficiency: 0.9
+  turbine_head: 8.5
+  turbine_max_flow_rate: 1440.0
+  turbine_max_power: 2160.0
+- name: Kuraz Headworks
+- name: Omorate
+objectives:
+- kind: Power Generation Maximization
+  name: Hydropower
+  target_node:
+  - Gibe-III
+  - Koysha
+- kind: Monthly Demand Deficit Minimization
+  name: Irrigation
+  quantile: 0.9
+  target_flow: Canals to Kuraz Sugar Plantations
+- kind: Monthly Demand Deficit Minimization
+  name: Environment
+  quantile: 0.9
+  target_flow: Outflow to Lake Turkana
+random_seed: 1

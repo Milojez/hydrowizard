@@ -1,3 +1,10 @@
+import sys
+import os
+# Add the specified directory to sys.path
+path_to_add = r"C:\Users\milos\Desktop\ROB_Delft\Courses\Year_2\HIPPO_Internship\Active_Codes_HIPPO\hydrowizard"
+sys.path.append(path_to_add)
+# print(sys.path)
+
 import argparse
 import os
 from hydrowizard.basin import Basin
