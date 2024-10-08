@@ -3,6 +3,7 @@ import os
 # Add the specified directory to sys.path
 path_to_add = r"C:\Users\milos\Desktop\ROB_Delft\Courses\Year_2\HIPPO_Internship\Active_Codes_HIPPO\hydrowizard"
 sys.path.append(path_to_add)
+sys.path.append(r'C:\Users\milos\Anaconda3\envs\Hydrowizard_env\Lib\site-packages')
 # print(sys.path)
 
 import argparse
@@ -163,6 +164,9 @@ def get_policy_params(basin, policy_source, policy_names, simulation_results_dir
         for part in policy_source.split(";"):
             if ":" in part:
                 filepath, row_nums = part.split(":", 1)
+                # print("LOL5")
+                # print(row_nums.split(","))
+                # print("LOL6")
                 row_nums = list(map(int, row_nums.split(",")))
             else:
                 filepath = part
@@ -173,6 +177,9 @@ def get_policy_params(basin, policy_source, policy_names, simulation_results_dir
         )
         for filepath, row_nums in file_rows:
             try:
+                print("LOL3")
+                print(filepath)
+                print("LOL4")
                 policies_array = np.loadtxt(filepath)
             except:
                 print(
@@ -227,6 +234,9 @@ def main(
     include_intermediate_results,
 ):
     # Create the basin
+    print("LOL1")
+    print(config_file) #################################################
+    print("LOL2")
     basin = create_basin(
         config_file=config_file,
         output_dir=output_dir,
