@@ -164,11 +164,14 @@ def get_policy_params(basin, policy_source, policy_names, simulation_results_dir
         for part in policy_source.split(";"):
             if ":" in part:
                 filepath, row_nums = part.split(":", 1)
-                # print("LOL5")
-                # print(row_nums.split(","))
-                # print("LOL6")
+                print("LOL5")
+                print(row_nums.split(","))
+                print("LOL6")
                 row_nums = list(map(int, row_nums.split(",")))
             else:
+                # print("LOL5")
+                # print(row_nums)
+                # print("LOL6")
                 filepath = part
                 row_nums = None
             file_rows.append((filepath, row_nums))
@@ -178,7 +181,8 @@ def get_policy_params(basin, policy_source, policy_names, simulation_results_dir
         for filepath, row_nums in file_rows:
             try:
                 print("LOL3")
-                print(filepath)
+                # filepath=f"{filepath}"
+                print(f"{filepath}")
                 print("LOL4")
                 policies_array = np.loadtxt(filepath)
             except:
