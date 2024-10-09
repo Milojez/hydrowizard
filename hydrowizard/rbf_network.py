@@ -24,7 +24,7 @@ class RBFNetwork:
             beta_j = self.betas[j, :]
             G[j] = self.rbf(x, center_j, beta_j)
         output = G.dot(self.weights)
-        output = np.array([0.8,0.5,0.1]) # [x, y, z] here the agent's actions can be hardcoded
+        output = np.array([0.0, 0.0, 0.0]) # [x, y, z] here the agent's actions can be hardcoded
         return output
 
 
