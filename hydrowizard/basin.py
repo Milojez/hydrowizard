@@ -1015,6 +1015,7 @@ class Basin:
         policy_decisions_array = policy_function.evaluate(policy_inputs_array)
         # convert tensor to dictionary
         policy_decisions = policy_decisions_array.tolist()
+        # print("POLICY DECISIONS: ", policy_decisions)
         return policy_decisions
 
     def get_policy_outputs_for_interval(
@@ -1028,7 +1029,7 @@ class Basin:
         policy_outputs = self.get_policy_decisions_using_rbf_network(
             policy_function, normalized_policy_inputs
         )
-        scaled_policy_outputs = self.scale_policy_outputs(policy_outputs)
+        scaled_policy_outputs = self.scale_policy_outputs(policy_outputs)        
         return scaled_policy_outputs
 
     def update_system_state_for_interval(

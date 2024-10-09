@@ -174,10 +174,6 @@ def get_policy_params(basin, policy_source, policy_names, simulation_results_dir
         )
         for filepath, row_nums in file_rows:
             try:
-                print("LOL3")
-                # filepath=f"{filepath}"
-                print(f"{filepath}")
-                print("LOL4")
                 policies_array = np.loadtxt(filepath)
             except:
                 print(
