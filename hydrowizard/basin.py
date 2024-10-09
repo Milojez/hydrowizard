@@ -985,6 +985,7 @@ class Basin:
         # scale policy outputs using the maximum values of x flows
         min_values = self.policy_outputs_min_values
         max_values = self.policy_outputs_max_values
+        # print("MIN VALUES:,", min_values)
         # scale policy outputs from -1 to 1 to 0 to max_value
         scaled_policy_outputs = [
             min_value + (policy_output + 1) * (max_value - min_value) / 2
@@ -1119,29 +1120,39 @@ class Basin:
                     df_flow_rates.loc[flow, interval_index] = round(
                         max(min(rate, remaining_outflow_rate), 0), round_decimals
                     )
+                    #This is the first time where the flows are overwritten and here the actions are zero as expected but minimal flows seem random
+                    print(f"LOL {flow} name and value: {df_flow_rates.loc[flow, interval_index] } ")
+                    print('LOL minimal outflow rate', min_outflow_rate)
                     remaining_outflow_rate -= df_flow_rates.loc[flow, interval_index]
 
                 total_outflow_rate = sum(
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].outgoing_flows
                 )
-
+                min_outflow_rate = 0.0
+                # print('LOL total_outflow_rate ', total_outflow_rate)
                 if total_outflow_rate < min_outflow_rate:
                     additional_outflow_rate = min_outflow_rate - total_outflow_rate
                     for flow in l_flow_names:
                         df_flow_rates.loc[flow, interval_index] += math.ceil(
                             additional_outflow_rate / len(l_flow_names)
                         )
+                    # print(f"LOL {flow} name and NEW VALUE after change value: {df_flow_rates.loc[flow, interval_index] } ")
+                        # print(f"LOL {flow} name and NEW VALUE after change value: {df_flow_rates.loc[flow, interval_index] } ")
+
                 else:
                     additional_outflow_rate = 0
+                    print(f"LOL {flow} name and NEW VALUE after change value: {df_flow_rates.loc[flow, interval_index] } ")
+                print()
+                print(df_flow_rates)                    
 
                 total_outflow_rate = sum(
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].outgoing_flows
                 )
-
                 net_outflow_rate = total_outflow_rate - inflow_rate
-
+                # print("LOL net flow:,  ",net_outflow_rate )
+                # print()
                 final_volume = round(
                     initial_volume
                     - net_outflow_rate * self.integration_interval_duration * 60 * 60,
@@ -1185,6 +1196,7 @@ class Basin:
                     df_flow_rates.loc[r_flow_name, interval_index] = round(
                         max_outflow_rate, round_decimals
                     )
+        print("LOL DONE")
 
     def simulate_basin(
         self,
