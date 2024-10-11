@@ -1,7 +1,7 @@
 basin:
   name: "Lower Omo"
   simulation_start_time: "2029-01-01 00:00"
-  simulation_horizon: 2 # years
+  simulation_horizon: 1 # years
   integration_interval: 12 # months
   cyclostationarity_interval: "month"
   optimization_method: "MOEA RBF"
@@ -9,7 +9,7 @@ basin:
 nodes:
   - name: "Gibe-III"
     reservoir_node: True
-    initial_volume: 11750000000.0 # m^3
+    initial_volume: 0.0 # m^3 11750000000.0
     max_volume: 11750000000.0 # m^3
     min_volume: 7000000000.0 # m^3
     bathymetry: "Bathymetry Gibe-III.csv"

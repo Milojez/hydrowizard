@@ -1105,7 +1105,8 @@ class Basin:
                 df_flow_rates.loc[evaporation_flow_name, interval_index] = (
                     evaporation_rate
                 )
-
+                evaporation_rate = 0.0 #ADDED FOR COMAPRISON
+                max_outflow_rate = self.hydropower_plant_properties[node]["turbine_max_flow"] #ADDED FOR COMAPRISON
                 remaining_outflow_rate = max_outflow_rate - evaporation_rate
                 min_outflow_rate = math.ceil(
                     max(
@@ -1117,23 +1118,30 @@ class Basin:
                 )
 
                 for flow, rate in zip(l_flow_names, policy_outputs):
+                    # print("LOL, rate , remaining_outflow ",rate, remaining_outflow_rate )
                     df_flow_rates.loc[flow, interval_index] = round(
                         max(min(rate, remaining_outflow_rate), 0), round_decimals
                     )
+                    # print("LOL, df_flow_rates.loc[flow, interval_index] ", df_flow_rates.loc[flow, interval_index] )
                     #This is the first time where the flows are overwritten and here the actions are zero as expected but minimal flows seem random
-                    print(f"LOL {flow} name and value: {df_flow_rates.loc[flow, interval_index] } ")
-                    print('LOL minimal outflow rate', min_outflow_rate)
+                    # print(f"LOL {flow} name and value: {df_flow_rates.loc[flow, interval_index] } ")
+                    # print('LOL minimal outflow rate', min_outflow_rate)
                     remaining_outflow_rate -= df_flow_rates.loc[flow, interval_index]
-
+                #This reads the evaporation and release rates of a reservoir to get the total outflow
                 total_outflow_rate = sum(
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].outgoing_flows
                 )
-                min_outflow_rate = 0.0
+                #Uncomment this line if you want to make sure the evaporation is withced off for updating the reservoirs' volumes
+                total_outflow_rate -= df_flow_rates.loc[evaporation_flow_name, interval_index]
+
+                min_outflow_rate = 0.0 #ADDED FOR COMAPIRSON
+                # print('LOL flows ', self.nodes[node].outgoing_flows[0])
                 # print('LOL total_outflow_rate ', total_outflow_rate)
                 if total_outflow_rate < min_outflow_rate:
                     additional_outflow_rate = min_outflow_rate - total_outflow_rate
                     for flow in l_flow_names:
+                        # print("LOL, l_flow_names: ", l_flow_names )
                         df_flow_rates.loc[flow, interval_index] += math.ceil(
                             additional_outflow_rate / len(l_flow_names)
                         )
@@ -1142,15 +1150,21 @@ class Basin:
 
                 else:
                     additional_outflow_rate = 0
-                    print(f"LOL {flow} name and NEW VALUE after change value: {df_flow_rates.loc[flow, interval_index] } ")
-                print()
-                print(df_flow_rates)                    
-
+                    # print(f"LOL {flow} name and NEW VALUE after change value: {df_flow_rates.loc[flow, interval_index] } ")
+                # print()
+                # print(df_flow_rates)                    
+                # print("LOL, total_outflow_rate 2: ", total_outflow_rate)
                 total_outflow_rate = sum(
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].outgoing_flows
                 )
+                #Uncomment this line if you want to make sure the evaporation is withced off for updating the reservoirs' volumes
+                total_outflow_rate -= df_flow_rates.loc[evaporation_flow_name, interval_index]
                 net_outflow_rate = total_outflow_rate - inflow_rate
+                # print("LOL, node name:",node)
+                # print("LOL, total_outflow_rate 2: ", total_outflow_rate)
+                # print("LOL, inflow_rate: ", inflow_rate)
+                # print("LOL net_flow_rate",net_outflow_rate )
                 # print("LOL net flow:,  ",net_outflow_rate )
                 # print()
                 final_volume = round(
@@ -1158,6 +1172,9 @@ class Basin:
                     - net_outflow_rate * self.integration_interval_duration * 60 * 60,
                     2,
                 )
+                
+                # print("LOL, Final Volume and integration_interval_duration", final_volume, self.integration_interval_duration )
+                # print()
                 # if the final volume is negligibly negative, set it to 0
                 if final_volume < 0 and final_volume > -1000.0:
                     final_volume = 0
@@ -1196,7 +1213,7 @@ class Basin:
                     df_flow_rates.loc[r_flow_name, interval_index] = round(
                         max_outflow_rate, round_decimals
                     )
-        print("LOL DONE")
+        # print("LOL DONE")
 
     def simulate_basin(
         self,

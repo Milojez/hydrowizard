@@ -24,7 +24,8 @@ class RBFNetwork:
             beta_j = self.betas[j, :]
             G[j] = self.rbf(x, center_j, beta_j)
         output = G.dot(self.weights)
-        output = np.array([-1.0, -1.0, -1.0]) # [x, y, z] here the agent's actions can be hardcoded
+        output = np.array([-1, -1, -1]) # [x, y, z] hardcoded agents"actions [-0.4, -0.54, -0.8]
+        #the corresponding action to [ 0.8, 0.5, 0.1] in morl4water here is [0.6, 0.0, -0.8] (basically multiply value from morl *2 and subtract 1)
         return output
 
 
