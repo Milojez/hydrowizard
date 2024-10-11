@@ -908,7 +908,7 @@ class Basin:
                 flow, cyclostationarity_number
             ]
             evaporation_flow_rates[flow] = (
-                evaporation_rate * surface * 0.01 * (1 / (30 * 24 * 60 * 60))
+                evaporation_rate * surface * 0.001 * (1 / (30 * 24 * 60 * 60)) #correction from 0.01 to 0.001 so that evaporation_rate can be in mm/month as in config.yaml 
             )
         return evaporation_flow_rates
 
@@ -993,6 +993,7 @@ class Basin:
                 policy_outputs, min_values, max_values
             )
         ]
+        print("LOL, scaled policy outputs: ", scaled_policy_outputs)
         return scaled_policy_outputs
 
     def get_normalized_policy_inputs_for_interval(
@@ -1030,7 +1031,7 @@ class Basin:
         policy_outputs = self.get_policy_decisions_using_rbf_network(
             policy_function, normalized_policy_inputs
         )
-        scaled_policy_outputs = self.scale_policy_outputs(policy_outputs)        
+        scaled_policy_outputs = self.scale_policy_outputs(policy_outputs)    
         return scaled_policy_outputs
 
     def update_system_state_for_interval(
@@ -1105,7 +1106,7 @@ class Basin:
                 df_flow_rates.loc[evaporation_flow_name, interval_index] = (
                     evaporation_rate
                 )
-                evaporation_rate = 0.0 #ADDED FOR COMAPRISON
+                evaporation_rate = 0.0 #ADDED FOR COMAPRISON, this is not enough to switch off evaporation, see total_outflow_rate
                 max_outflow_rate = self.hydropower_plant_properties[node]["turbine_max_flow"] #ADDED FOR COMAPRISON
                 remaining_outflow_rate = max_outflow_rate - evaporation_rate
                 min_outflow_rate = math.ceil(
@@ -1118,10 +1119,12 @@ class Basin:
                 )
 
                 for flow, rate in zip(l_flow_names, policy_outputs):
-                    # print("LOL, rate , remaining_outflow ",rate, remaining_outflow_rate )
+                    print("LOL, policy_outputs ", policy_outputs )
+                    print("LOL, l_flow_names ", l_flow_names )
                     df_flow_rates.loc[flow, interval_index] = round(
                         max(min(rate, remaining_outflow_rate), 0), round_decimals
                     )
+                    print("LOL, rate: " , rate)
                     # print("LOL, df_flow_rates.loc[flow, interval_index] ", df_flow_rates.loc[flow, interval_index] )
                     #This is the first time where the flows are overwritten and here the actions are zero as expected but minimal flows seem random
                     # print(f"LOL {flow} name and value: {df_flow_rates.loc[flow, interval_index] } ")
@@ -1132,7 +1135,7 @@ class Basin:
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].outgoing_flows
                 )
-                #Uncomment this line if you want to make sure the evaporation is withced off for updating the reservoirs' volumes
+                #Uncomment this line if you want to make sure the evaporation is switched off for updating the reservoirs' volumes
                 total_outflow_rate -= df_flow_rates.loc[evaporation_flow_name, interval_index]
 
                 min_outflow_rate = 0.0 #ADDED FOR COMAPIRSON
@@ -1158,10 +1161,12 @@ class Basin:
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].outgoing_flows
                 )
-                #Uncomment this line if you want to make sure the evaporation is withced off for updating the reservoirs' volumes
+                #Uncomment this line if you want to make sure the evaporation is switched off for updating the reservoirs' volumes
                 total_outflow_rate -= df_flow_rates.loc[evaporation_flow_name, interval_index]
+                # print("LOL total_outflow_rate: ", total_outflow_rate)
                 net_outflow_rate = total_outflow_rate - inflow_rate
-                # print("LOL, node name:",node)
+                # print("LOL, node name:", node)
+                # print("LOL total_outflow_rate: ", total_outflow_rate)
                 # print("LOL, total_outflow_rate 2: ", total_outflow_rate)
                 # print("LOL, inflow_rate: ", inflow_rate)
                 # print("LOL net_flow_rate",net_outflow_rate )
