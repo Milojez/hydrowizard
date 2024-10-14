@@ -33,7 +33,7 @@ nodes:
     turbine_max_flow_rate: 1064.0 # m^3/s
   - name: "Koysha"
     reservoir_node: True
-    initial_volume: 300000000.0 # m^3 0.0
+    initial_volume: 3000000000.0 # m^3 0.0
     max_volume: 6000000000.0 # m^3
     min_volume: 3000000000.0 # m^3
     bathymetry: "Bathymetry Koysha.csv"

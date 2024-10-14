@@ -1087,7 +1087,7 @@ class Basin:
                     df_flow_rates.loc[flow.name, interval_index]
                     for flow in self.nodes[node].incoming_flows
                 )
-                print("LOL, inflow rate: ", inflow_rate )
+                # print("LOL, inflow rate: ", inflow_rate )
                 evaporation_rate = evaporation_flow_rates[evaporation_flow_name]
 
                 # allow volume to decrease to 0 if the initial volume is already below the minimum volume
@@ -1166,7 +1166,7 @@ class Basin:
 
                 # print("LOL total_outflow_rate: ", total_outflow_rate)
                 net_outflow_rate = total_outflow_rate - inflow_rate
-                print("LOL, net_outflow_rate: ", net_outflow_rate )
+                # print("LOL, net_outflow_rate: ", net_outflow_rate )
                 # print("LOL, node name:", node)
                 # print("LOL total_outflow_rate: ", total_outflow_rate)
                 # print("LOL, total_outflow_rate 2: ", total_outflow_rate)
